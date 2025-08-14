@@ -1,10 +1,15 @@
 package com.example.flashlight.viewmodel
 
 import android.app.Application
+import android.content.pm.PackageManager
 import android.hardware.camera2.CameraManager
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.media.MediaRecorder
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +27,9 @@ class FlashViewModel(application: Application) : AndroidViewModel(application) {
     private val _isBlinking = MutableLiveData(false)
     val isBlinking: LiveData<Boolean> = _isBlinking
 
+    private val _isListening = MutableLiveData(false)
+    val isListening: LiveData<Boolean> = _isListening
+
     var delayUnit: Long = 200L
 
     private var sosHandler: Handler? = null
@@ -30,6 +38,15 @@ class FlashViewModel(application: Application) : AndroidViewModel(application) {
     private var blinkHandler: Handler? = null
     private var blinkRunnable: Runnable? = null
 
+    private var audioRecord: AudioRecord? = null
+    private var isAudioRunning = false
+
+    private fun hasPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            getApplication(),
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
     fun toggleFlash() {
         val newState = !(isFlashOn.value ?: false)
         _isFlashOn.value = newState
@@ -143,4 +160,95 @@ class FlashViewModel(application: Application) : AndroidViewModel(application) {
             e.printStackTrace()
         }
     }
+
+    fun startListeningToSound() {
+        if (_isListening.value == true) return
+
+        if (!hasPermission(android.Manifest.permission.RECORD_AUDIO) ||
+            !hasPermission(android.Manifest.permission.CAMERA)
+        ) {
+            _isListening.postValue(false)
+            return
+        }
+
+        val bufferSize = AudioRecord.getMinBufferSize(
+            8000,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT
+        )
+
+        try {
+            audioRecord = AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                8000,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                bufferSize
+            )
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+            _isListening.postValue(false)
+            return
+        }
+
+
+        if (audioRecord?.state != AudioRecord.STATE_INITIALIZED) {
+            _isListening.postValue(false)
+            audioRecord?.release()
+            audioRecord = null
+            return
+        }
+
+        audioRecord?.startRecording()
+        isAudioRunning = true
+        _isListening.value = true
+
+        Thread {
+            val buffer = ShortArray(bufferSize)
+            while (isAudioRunning) {
+                val read = audioRecord?.read(buffer, 0, buffer.size) ?: 0
+                if (read > 0) {
+                    val max = buffer.maxOrNull()?.toInt() ?: 0
+                    if (max > 2000) {  // Ngưỡng âm thanh
+                        flashOnce()
+                        Thread.sleep(150) // Giảm tần suất nháy
+                    }
+                }
+            }
+        }.start()
+    }
+
+    fun stopListeningToSound() {
+        isAudioRunning = false
+        _isListening.value = false
+        audioRecord?.stop()
+        audioRecord?.release()
+        audioRecord = null
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                cameraManager.setTorchMode(cameraId, false)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun flashOnce() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                cameraManager.setTorchMode(cameraId, true)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    try {
+                        cameraManager.setTorchMode(cameraId, false)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }, 100)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 }
