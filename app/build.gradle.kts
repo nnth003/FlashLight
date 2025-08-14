@@ -33,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -45,6 +48,10 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.navigation/navigation-fragment-ktx
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
+
+    //Color Picker
+    // https://mvnrepository.com/artifact/com.github.yukuku/ambilwarna
+    implementation("com.github.yukuku:ambilwarna:2.0.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
