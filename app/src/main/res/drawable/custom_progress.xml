@@ -4,7 +4,7 @@
         <shape>
             <corners android:radius="10dp" />
             <solid android:color="#DDDDDD" /> <!-- nền màu xám nhạt -->
-            <size android:height="12dp" />   <!-- chiều cao track -->
+            <size android:height="4dp" />   <!-- chiều cao track -->
         </shape>
     </item>
 
@@ -13,7 +13,7 @@
             <shape>
                 <corners android:radius="10dp" />
                 <solid android:color="#FFB300" />  <!-- màu vàng cam -->
-                <size android:height="12dp" />
+                <size android:height="4dp" />
             </shape>
         </clip>
     </item>

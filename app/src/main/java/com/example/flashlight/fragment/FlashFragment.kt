@@ -29,11 +29,12 @@ class FlashFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var isFlashOn = false
     private var isSosActive = false
+    private var isBlinking = false
     private var sosHandler: Handler? = null
     private var sosRunnable: Runnable? = null
     private var blinkHandler: Handler? = null
     private var blinkRunnable: Runnable? = null
-    private var isBlinking = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,7 @@ class FlashFragment : Fragment() {
         flashButton.setOnClickListener {
             if (isSosActive) {
                 stopSosSignal(requireContext())
-                sosButton.setImageResource(R.drawable.sos_96)
+                sosButton.setImageResource(R.drawable.sos_82)
                 sosButton.clearColorFilter()
             }
             if (isBlinking) {
