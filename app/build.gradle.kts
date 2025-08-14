@@ -37,8 +37,14 @@ android {
 
 dependencies {
 
-    // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended
+    // Material Icons
+    //https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+    // Navigation Fragment
+    // https://mvnrepository.com/artifact/androidx.navigation/navigation-fragment-ktx
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
