@@ -42,6 +42,7 @@
         android:background="@drawable/bottom_background"
         app:itemIconTint="@color/blue"
         app:itemActiveIndicatorStyle="@color/white"
+        app:itemTextColor="@color/blue"
         app:itemRippleColor="@color/white"
         app:labelVisibilityMode="selected"
         app:layout_constraintBottom_toBottomOf="parent"
