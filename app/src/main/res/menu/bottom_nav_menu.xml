@@ -3,12 +3,12 @@
     <item
         android:id="@+id/flashFragment"
         android:icon="@drawable/highlight_24"
-        android:title="Home" />
+        android:title="Flash Home" />
 
     <item
-        android:id="@+id/audioFlashFragment"
-        android:icon="@drawable/ear_24"
-        android:title="Search" />
+        android:id="@+id/scrollerFlashFragment"
+        android:icon="@drawable/scroll_24"
+        android:title="Scroller Text" />
 
     <item
         android:id="@+id/bottom_settings"

@@ -12,8 +12,8 @@
         tools:layout="@layout/fragment_flash" />
 
     <fragment
-        android:id="@+id/audioFlashFragment"
-        android:name="com.example.flashlight.fragment.AudioFlashFragment"
-        android:label="Audio Flash"
-        tools:layout="@layout/fragment_audio_flash" />
+        android:id="@+id/scrollerFlashFragment"
+        android:name="com.example.flashlight.fragment.ScrollerFragment"
+        android:label="Scroller Flash"
+        tools:layout="@layout/fragment_scroller" />
 </navigation>
