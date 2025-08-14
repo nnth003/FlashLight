@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollerFlashFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".fragment.ScrollerFragment">
+
+    <!-- Thanh trạng thái + Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Xem Trước"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Nội dung chính -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <!-- Khối preview dạng chấm lưới -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@drawable/bg_preview_text">
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:scrollbars="none"
+                    tools:ignore="UselessParent">
+
+                    <TextView
+                        android:id="@+id/previewText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:ellipsize="none"
+                        android:gravity="center_vertical|start"
+                        android:scrollHorizontally="true"
+                        android:maxLines="1"
+                        android:text="Hello 😀"
+                        android:textColor="#FFFF00"
+                        android:textSize="72sp"
+                        android:textStyle="bold"
+                        />
+
+                </HorizontalScrollView>
+
+            </FrameLayout>
+
+            <!-- Thanh nhập văn bản (ẩn trong ảnh, có thể để hoặc bỏ) -->
+            <EditText
+                android:id="@+id/inputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Nhập văn bản"
+                android:padding="12dp"
+                android:maxLines="1"
+                android:text="Hello 😀"
+                android:textColor="#FFFFFF" />
+
+            <!-- Thanh điều khiển ←  ||  → -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnLeft"
+                    android:layout_width="88dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_rounded_color_view"
+                    android:backgroundTint="#4169E1"
+                    android:src="@drawable/outline_arrow_back_24"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:layout_width="88dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_rounded_color_view"
+                    android:backgroundTint="#444444"
+                    android:src="@drawable/outline_play_arrow_24"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/btnRight"
+                    android:layout_width="88dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_rounded_color_view"
+                    android:backgroundTint="#444444"
+                    android:fontFamily="sans-serif-medium"
+                    android:src="@drawable/outline_arrow_forward_24"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <!-- Tốc Độ + giá trị -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tốc Độ"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekSpeed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:max="100"
+                    android:progress="45"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb" />
+
+                <TextView
+                    android:id="@+id/tvSpeedValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="45"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Kích Thước + giá trị -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Kích Thước"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/seekSize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:max="100"
+                    android:progress="90"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb" />
+
+                <TextView
+                    android:id="@+id/tvSizeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="90%"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <!-- Màu sắc -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="35dp"
+                    android:text="Màu Sắc"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/colorText"
+                    android:layout_width="96dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_rounded_color_view"
+                    android:backgroundTint="#FFFF00"
+                    android:backgroundTintMode="add" />
+
+                <View
+                    android:id="@+id/colorBackground"
+                    android:layout_width="96dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_rounded_color_view"
+                    android:backgroundTint="#FF7766"
+                    android:backgroundTintMode="src_atop" />
+            </LinearLayout>
+
+            <!-- Checkbox nhấp nháy -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/checkTextBlink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:text="Chữ Nhấp Nháy"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:id="@+id/colorTextBox"
+                        android:layout_width="96dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_rounded_color_view"
+                        android:backgroundTint="#FFFF00" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/checkBackgroundBlink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="25dp"
+                        android:text="Nền Nhấp Nháy"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:id="@+id/colorBox"
+                        android:layout_width="96dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_rounded_color_view"
+                        android:backgroundTint="#00ACC1" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Tốc Độ Nhấp Nháy"
+                    android:textColor="#FFFFFF" />
+
+                <SeekBar
+                    android:id="@+id/seekBlinkSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:max="5"
+                    android:progress="2"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb" />
+            </LinearLayout>
+
+            <!-- Nút Chia Sẻ & Bắt Đầu -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--                <Button-->
+                <!--                    android:id="@+id/btnShare"-->
+                <!--                    android:layout_width="0dp"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    android:layout_weight="1.5"-->
+                <!--                    android:drawablePadding="6dp"-->
+                <!--                    android:fontFamily="sans-serif-medium"-->
+                <!--                    android:text="Chia Sẻ"-->
+                <!--                    android:textAllCaps="false"-->
+                <!--                    android:textColor="#4169E1" />-->
+
+                <Button
+                    android:id="@+id/btnStart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:backgroundTint="#4169E1"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="BẮT ĐẦU"
+                    android:textAllCaps="true"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
