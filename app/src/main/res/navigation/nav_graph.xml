@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/flashFragment">
+
+    <fragment
+        android:id="@+id/flashFragment"
+        android:name="com.example.flashlight.fragment.FlashFragment"
+        android:label="Flash"
+        tools:layout="@layout/fragment_flash" />
+
+    <fragment
+        android:id="@+id/audioFlashFragment"
+        android:name="com.example.flashlight.fragment.AudioFlashFragment"
+        android:label="Audio Flash"
+        tools:layout="@layout/fragment_audio_flash" />
+</navigation>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottom_home"
+        android:id="@+id/flashFragment"
         android:icon="@drawable/highlight_24"
         android:title="Home" />
 
     <item
-        android:id="@+id/bottom_search"
-        android:icon="@android:drawable/btn_star"
+        android:id="@+id/audioFlashFragment"
+        android:icon="@drawable/ear_24"
         android:title="Search" />
 
     <item
