@@ -11,9 +11,22 @@
         android:label="Flash"
         tools:layout="@layout/fragment_flash" />
 
+<!--    <fragment-->
+<!--        android:id="@+id/scrollerFlashFragment"-->
+<!--        android:name="com.example.flashlight.fragment.ScrollerFragment"-->
+<!--        android:label="Scroller Flash"-->
+<!--        tools:layout="@layout/fragment_scroller" />-->
+
     <fragment
-        android:id="@+id/scrollerFlashFragment"
-        android:name="com.example.flashlight.fragment.ScrollerFragment"
-        android:label="Scroller Flash"
-        tools:layout="@layout/fragment_scroller" />
+        android:id="@+id/flashMorse"
+        android:name="com.example.flashlight.fragment.MorseFragment"
+        android:label="Morse"
+        tools:layout="@layout/fragment_morse" />
+
+    <fragment
+        android:id="@+id/flashSetting"
+        android:name="com.example.flashlight.fragment.SettingFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_setting" />
+
 </navigation>
