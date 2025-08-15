@@ -4,8 +4,8 @@
     android:id="@+id/flashMorse"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@drawable/morse_background_gradient"
+    android:fitsSystemWindows="true"
     tools:context=".fragment.MorseFragment">
 
     <LinearLayout
@@ -19,37 +19,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nhập văn bản"
+            android:textColor="#FFFFFF"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/eT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:background="@drawable/edittext_background"
-            android:lines="2"
-            android:padding="10dp"/>
+            android:gravity="start|center_vertical"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:padding="10dp"
+            android:scrollHorizontally="true"
+            android:textColor="@color/white" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Morse"
+            android:textColor="#FFFFFF"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etOutput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="146dp"
             android:background="@drawable/edittext_background"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:gravity="start|top"
+            android:inputType="none"
+            android:longClickable="false"
+            android:maxLines="10"
             android:padding="10dp"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
             android:textColor="@color/white"
-            android:lines="2"
-            android:textSize="35sp"
-            android:editable="false"/>
+            android:textSize="35sp" />
 
     </LinearLayout>
 
@@ -90,9 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/button_background"
-            android:src="@drawable/sync_disable_32"
             android:contentDescription="Lặp lại"
-            />
+            android:src="@drawable/sync_disable_32" />
 
     </LinearLayout>
 </FrameLayout>
