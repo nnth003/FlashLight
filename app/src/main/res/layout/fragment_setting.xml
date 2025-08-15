@@ -4,6 +4,8 @@
     android:id="@+id/flashSetting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/morse_background_gradient"
+    android:fitsSystemWindows="true"
     tools:context=".fragment.SettingFragment">
 
     <ScrollView
@@ -22,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="Cài đặt đèn pin"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -32,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="Nháy đèn khi có cuộc gọi"
+                android:textColor="@color/white"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <TextView
@@ -39,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Tần suất nháy (ms)"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <SeekBar
@@ -47,14 +52,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:max="800"
-                android:progress="300" />
+                android:progress="300"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/text_flash_frequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="500 ms" />
+                android:text="500 ms"
+                android:textColor="@color/white" />
             <!-- Flash khi có SMS -->
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_flash_on_sms"
@@ -62,16 +69,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="Nháy đèn khi có tin nhắn SMS"
+                android:textColor="@color/white"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-<!--            &lt;!&ndash; Thông báo khi thoát app &ndash;&gt;-->
-<!--            <androidx.appcompat.widget.SwitchCompat-->
-<!--                android:id="@+id/switch_exit_confirmation"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginBottom="16dp"-->
-<!--                android:text="Hiển thị thông báo khi thoát ứng dụng"-->
-<!--                tools:ignore="UseSwitchCompatOrMaterialXml" />-->
 
         </LinearLayout>
     </ScrollView>

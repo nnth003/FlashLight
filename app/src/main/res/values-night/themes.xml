@@ -3,5 +3,11 @@
     <style name="Base.Theme.FlashLight" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Định nghĩa màu chữ mặc định -->
+        <item name="android:textColor">@color/white</item>
+        <!-- Định nghĩa màu nền mặc định (tùy chọn) -->
+        <item name="android:windowBackground">#121212</item>
+
     </style>
 </resources>

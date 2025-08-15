@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/morse_background_gradient"
     tools:context=".fragment.MorseFragment">
 
     <LinearLayout
@@ -19,28 +20,34 @@
             android:layout_height="wrap_content"
             android:text="Nhập văn bản"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"/>
 
         <EditText
             android:id="@+id/eT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2C07D9F2"
-            android:lines="5" />
+            android:textColor="@color/white"
+            android:background="@drawable/edittext_background"
+            android:lines="2"
+            android:padding="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Morse"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"/>
 
         <EditText
             android:id="@+id/etOutput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2C07D9F2"
-            android:lines="5"
+            android:background="@drawable/edittext_background"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:lines="2"
             android:textSize="35sp"
             android:editable="false"/>
 
@@ -57,24 +64,32 @@
             android:id="@+id/soundBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background"
             android:src="@drawable/outline_volume_off_32" />
 
         <ImageButton
             android:id="@+id/btnPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background"
             android:src="@drawable/baseline_play_arrow_32" />
 
         <ImageButton
             android:id="@+id/btnFlash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background"
             android:src="@drawable/baseline_flash_off_32" />
 
         <ImageButton
             android:id="@+id/loopBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background"
             android:src="@drawable/sync_disable_32"
             android:contentDescription="Lặp lại"
             />

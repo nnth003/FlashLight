@@ -5,86 +5,164 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.FlashFragment"
+    android:fitsSystemWindows="false"
     android:id="@+id/flashFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Background for flashButton -->
+
+        <View
+            android:id="@+id/flashButtonBackground"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/circle_background"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
+
         <ImageView
             android:id="@+id/flashButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="324dp"
             android:contentDescription="Flash"
             android:src="@drawable/outline_flashlight_on_96"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/flashButtonBackground"
+            app:layout_constraintEnd_toEndOf="@id/flashButtonBackground"
+            app:layout_constraintStart_toStartOf="@id/flashButtonBackground"
+            app:layout_constraintTop_toTopOf="@id/flashButtonBackground"
+            app:tint="#FFFFFF" />
+
+        <!-- Background for sosButton -->
+
+        <View
+            android:id="@+id/sosButtonBackground"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/circle_background"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@id/flashButtonBackground"
+            app:layout_constraintEnd_toStartOf="@id/flashButtonBackground"
+            app:layout_constraintHorizontal_bias="0.76"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.919" />
 
         <ImageView
             android:id="@+id/sosButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="188dp"
             android:contentDescription="SOS"
             android:src="@drawable/sos_82"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.194"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/sosButtonBackground"
+            app:layout_constraintEnd_toEndOf="@id/sosButtonBackground"
+            app:layout_constraintStart_toStartOf="@id/sosButtonBackground"
+            app:layout_constraintTop_toTopOf="@id/sosButtonBackground"
+            app:tint="#FFFFFF" />
+
+        <!-- Background for hearingButton -->
+
+        <View
+            android:id="@+id/hearingButtonBackground"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_background"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@id/flashButtonBackground"
+            app:layout_constraintStart_toEndOf="@id/flashButtonBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.919" />
 
         <ImageView
             android:id="@+id/hearingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="192dp"
             android:contentDescription="Listen"
             android:src="@drawable/outline_hearing_82"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.82"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/hearingButtonBackground"
+            app:layout_constraintEnd_toEndOf="@id/hearingButtonBackground"
+            app:layout_constraintStart_toStartOf="@id/hearingButtonBackground"
+            app:layout_constraintTop_toTopOf="@id/hearingButtonBackground"
+            app:tint="#FFFFFF" />
+
+        <!-- Background for screenButton -->
+
+        <View
+            android:id="@+id/screenButtonBackground"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/circle_background"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@id/speedSeekBar"
+            app:layout_constraintEnd_toStartOf="@id/flashButtonBackground"
+            app:layout_constraintTop_toBottomOf="@id/flashButtonBackground"
+            app:layout_constraintVertical_bias="0.113" />
 
         <ImageView
             android:id="@+id/screenButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="456dp"
             android:contentDescription="Screen"
             android:src="@drawable/outline_fullscreen_portrait_82"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.194"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/screenButtonBackground"
+            app:layout_constraintEnd_toEndOf="@id/screenButtonBackground"
+            app:layout_constraintStart_toStartOf="@id/screenButtonBackground"
+            app:layout_constraintTop_toTopOf="@id/screenButtonBackground"
+            app:tint="#FFFFFF" />
+
+        <!-- Background for loadingButton -->
+
+        <View
+            android:id="@+id/loadingButtonBackground"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_background"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@id/speedSeekBar"
+            app:layout_constraintStart_toEndOf="@id/flashButtonBackground"
+            app:layout_constraintTop_toBottomOf="@id/flashButtonBackground"
+            app:layout_constraintVertical_bias="0.113" />
 
         <ImageView
             android:id="@+id/loadingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="456dp"
             android:contentDescription="Loading"
             android:src="@drawable/loading_82"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.82"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/loadingButtonBackground"
+            app:layout_constraintEnd_toEndOf="@id/loadingButtonBackground"
+            app:layout_constraintStart_toStartOf="@id/loadingButtonBackground"
+            app:layout_constraintTop_toTopOf="@id/loadingButtonBackground"
+            app:tint="#FFFFFF" />
 
         <SeekBar
             android:id="@+id/speedSeekBar"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginBottom="0dp"
             android:visibility="gone"
             android:max="10"
             android:progress="5"
             android:progressDrawable="@drawable/custom_progress"
             android:thumb="@drawable/custom_thumb"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loadingButton" />
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

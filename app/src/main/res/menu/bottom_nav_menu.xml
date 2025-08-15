@@ -12,7 +12,7 @@
     <item
         android:id="@+id/flashMorse"
         android:icon="@drawable/change_24"
-        android:title="Profile" />
+        android:title="Morse" />
 
     <item
         android:id="@+id/flashSetting"
