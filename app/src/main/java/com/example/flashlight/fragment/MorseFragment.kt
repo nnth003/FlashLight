@@ -10,6 +10,7 @@ import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.method.ScrollingMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -81,6 +82,9 @@ class MorseFragment : Fragment() {
         val flashBtn = view.findViewById<ImageButton>(R.id.btnFlash)
         val loopBtn = view.findViewById<ImageButton>(R.id.loopBtn)
         playButton = view.findViewById<ImageButton>(R.id.btnPlay)
+
+//        morseOutput.setHorizontallyScrolling(true)
+        morseOutput.movementMethod = ScrollingMovementMethod()
 
         inputText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -172,6 +176,7 @@ class MorseFragment : Fragment() {
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                         )
                         morseOutput.setText(spannable)
+                        morseOutput.setSelection(currentIndex)
                     }
 
                     when (char) {

@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,20 +32,16 @@ import com.example.flashlight.service.FlashService
  * create an instance of this fragment.
  */
 class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private lateinit var sharedPreferences: SharedPreferences
     private var isFlashOnCallEnabled = false
     private var isFlashOnSmsEnabled = false
     private var isExitConfirmationEnabled = false
-    private var flashFrequency = 500 // Mặc định 500ms
-
+    private var flashFrequency = 500 // Default 500ms
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Khởi tạo SharedPreferences
-        sharedPreferences =
-            requireContext().getSharedPreferences("FlashlightPrefs", Context.MODE_PRIVATE)
-        // Khôi phục trạng thái từ SharedPreferences
+        sharedPreferences = requireContext().getSharedPreferences("FlashlightPrefs", Context.MODE_PRIVATE)
         isFlashOnCallEnabled = sharedPreferences.getBoolean("flashOnCall", false)
         isFlashOnSmsEnabled = sharedPreferences.getBoolean("flashOnSms", false)
         isExitConfirmationEnabled = sharedPreferences.getBoolean("exitConfirmation", false)
@@ -53,7 +52,6 @@ class SettingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
@@ -62,53 +60,56 @@ class SettingFragment : Fragment() {
 
         val switchFlashOnCall = view.findViewById<SwitchCompat>(R.id.switch_flash_on_call)
         val switchFlashOnSms = view.findViewById<SwitchCompat>(R.id.switch_flash_on_sms)
+//        val switchExitConfirmation = view.findViewById<SwitchCompat>(R.id.switch_exit_confirmation)
         val seekBarFlashFrequency = view.findViewById<SeekBar>(R.id.seekbar_flash_frequency)
         val textFlashFrequency = view.findViewById<TextView>(R.id.text_flash_frequency)
 
-        // Khôi phục trạng thái switch
         switchFlashOnCall.isChecked = isFlashOnCallEnabled
         switchFlashOnSms.isChecked = isFlashOnSmsEnabled
-
-        // Khởi tạo SeekBar và TextView
-        seekBarFlashFrequency.progress =
-            1000 - flashFrequency // Ánh xạ ngược: progress 0 -> 1000ms, progress 800 -> 200ms
+//        switchExitConfirmation.isChecked = isExitConfirmationEnabled
+        seekBarFlashFrequency.progress = 1000 - flashFrequency
         textFlashFrequency.text = "$flashFrequency ms"
 
-        // Kiểm tra và yêu cầu quyền
+        // Check permissions and MIUI settings on startup
         if (!hasPermissions()) {
             requestPermissions()
-        } else if (isFlashOnCallEnabled || isFlashOnSmsEnabled) {
+        } else if (isFlashOnCallEnabled || isFlashOnSmsEnabled || sharedPreferences.getBoolean("isFlashOn", false)) {
+            promptMiuiSettings()
             startFlashService()
         }
 
-        // Lắng nghe trạng thái switch cho cuộc gọi
         switchFlashOnCall.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && !hasPhoneStatePermission()) {
+                switchFlashOnCall.isChecked = false
+                Toast.makeText(context, "Cần quyền READ_PHONE_STATE để nháy đèn khi có cuộc gọi!", Toast.LENGTH_SHORT).show()
+                requestPermissions()
+                return@setOnCheckedChangeListener
+            }
             isFlashOnCallEnabled = isChecked
             with(sharedPreferences.edit()) {
                 putBoolean("flashOnCall", isFlashOnCallEnabled)
                 apply()
             }
-            if (isChecked && hasPermissions()) {
-                startFlashService()
-            } else if (!isFlashOnCallEnabled && !isFlashOnSmsEnabled) {
-                stopFlashService()
-            }
+            if (isChecked) promptMiuiSettings()
+            updateFlashService()
         }
 
-        // Lắng nghe trạng thái switch cho SMS
         switchFlashOnSms.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && !hasSmsPermission()) {
+                switchFlashOnSms.isChecked = false
+                Toast.makeText(context, "Cần quyền RECEIVE_SMS để nháy đèn khi có tin nhắn!", Toast.LENGTH_SHORT).show()
+                requestPermissions()
+                return@setOnCheckedChangeListener
+            }
             isFlashOnSmsEnabled = isChecked
             with(sharedPreferences.edit()) {
                 putBoolean("flashOnSms", isFlashOnSmsEnabled)
                 apply()
             }
-            if (isChecked && hasPermissions()) {
-                startFlashService()
-            } else if (!isFlashOnCallEnabled && !isFlashOnSmsEnabled) {
-                stopFlashService()
-            }
+            if (isChecked) promptMiuiSettings()
+            updateFlashService()
         }
-        // Lắng nghe trạng thái switch cho xác nhận thoát
+
 //        switchExitConfirmation.setOnCheckedChangeListener { _, isChecked ->
 //            isExitConfirmationEnabled = isChecked
 //            with(sharedPreferences.edit()) {
@@ -116,7 +117,7 @@ class SettingFragment : Fragment() {
 //                apply()
 //            }
 //        }
-        // Lắng nghe SeekBar để điều chỉnh tần suất
+
         seekBarFlashFrequency.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 flashFrequency = 1000 - progress
@@ -125,9 +126,7 @@ class SettingFragment : Fragment() {
                     putInt("flashFrequency", flashFrequency)
                     apply()
                 }
-                if (isFlashOnCallEnabled || isFlashOnSmsEnabled) {
-                    updateFlashService()
-                }
+                updateFlashService()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -136,18 +135,28 @@ class SettingFragment : Fragment() {
     }
 
     private fun hasPermissions(): Boolean {
+        return hasPhoneStatePermission() && hasCameraPermission() && hasSmsPermission()
+    }
+
+    private fun hasPhoneStatePermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             android.Manifest.permission.READ_PHONE_STATE
-        ) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.RECEIVE_SMS
-                ) == PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun hasCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun hasSmsPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.RECEIVE_SMS
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermissions() {
@@ -162,31 +171,97 @@ class SettingFragment : Fragment() {
         )
     }
 
+    private fun promptMiuiSettings() {
+        if (Build.MANUFACTURER.equals("xiaomi", ignoreCase = true)) {
+            val sharedPreferences = requireContext().getSharedPreferences("FlashlightPrefs", Context.MODE_PRIVATE)
+            val hasPrompted = sharedPreferences.getBoolean("hasPromptedMiuiSettings", false)
+            if (!hasPrompted) {
+                Toast.makeText(
+                    context,
+                    "Vui lòng bật Tự động khởi động và tắt Tối ưu hóa pin cho ứng dụng để đảm bảo hoạt động nền!",
+                    Toast.LENGTH_LONG
+                ).show()
+                try {
+                    // Prompt for auto-start
+                    val autoStartIntent = Intent().apply {
+                        setClassName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
+                    }
+                    startActivity(autoStartIntent)
+                } catch (e: Exception) {
+                    Log.e("SettingFragment", "Failed to open MIUI auto-start settings", e)
+                }
+                try {
+                    // Prompt for battery optimization
+                    val batteryIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                        data = Uri.parse("package:${requireContext().packageName}")
+                    }
+                    startActivity(batteryIntent)
+                } catch (e: Exception) {
+                    Log.e("SettingFragment", "Failed to open battery optimization settings", e)
+                }
+                with(sharedPreferences.edit()) {
+                    putBoolean("hasPromptedMiuiSettings", true)
+                    apply()
+                }
+            }
+        }
+    }
+
     private fun startFlashService() {
+        if (!hasPermissions()) {
+            Log.w("SettingFragment", "Cannot start FlashService: missing permissions")
+            return
+        }
         Log.d("SettingFragment", "Starting FlashService with frequency: $flashFrequency")
         val intent = Intent(requireContext(), FlashService::class.java).apply {
             putExtra("flashFrequency", flashFrequency)
             putExtra("flashOnCall", isFlashOnCallEnabled)
             putExtra("flashOnSms", isFlashOnSmsEnabled)
+            putExtra("isFlashOn", sharedPreferences.getBoolean("isFlashOn", false))
         }
-        ContextCompat.startForegroundService(requireContext(), intent)
+        try {
+            ContextCompat.startForegroundService(requireContext(), intent)
+        } catch (e: Exception) {
+            Log.e("SettingFragment", "Failed to start FlashService", e)
+            Toast.makeText(context, "Lỗi khi khởi động dịch vụ đèn pin", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun stopFlashService() {
         Log.d("SettingFragment", "Stopping FlashService")
         val intent = Intent(requireContext(), FlashService::class.java)
-        requireContext().stopService(intent)
+        try {
+            requireContext().stopService(intent)
+        } catch (e: Exception) {
+            Log.e("SettingFragment", "Failed to stop FlashService", e)
+        }
     }
 
     private fun updateFlashService() {
-        Log.d("SettingFragment", "Updating FlashService with frequency: $flashFrequency")
+        if (!hasPermissions()) {
+            Log.w("SettingFragment", "Cannot update FlashService: missing permissions")
+            return
+        }
+        val isFlashOn = sharedPreferences.getBoolean("isFlashOn", false)
+        if (!isFlashOnCallEnabled && !isFlashOnSmsEnabled && !isFlashOn) {
+            Log.d("SettingFragment", "No features enabled, stopping FlashService")
+            stopFlashService()
+            return
+        }
+        Log.d("SettingFragment", "Updating FlashService with frequency: $flashFrequency, flashOnCall: $isFlashOnCallEnabled, flashOnSms: $isFlashOnSmsEnabled, isFlashOn: $isFlashOn")
         val intent = Intent(requireContext(), FlashService::class.java).apply {
             action = "UPDATE_FREQUENCY"
             putExtra("flashFrequency", flashFrequency)
             putExtra("flashOnCall", isFlashOnCallEnabled)
             putExtra("flashOnSms", isFlashOnSmsEnabled)
+            putExtra("isFlashOn", isFlashOn)
         }
-        requireContext().startService(intent)
+        try {
+            ContextCompat.startForegroundService(requireContext(), intent)
+        } catch (e: Exception) {
+            Log.e("SettingFragment", "Failed to update FlashService", e)
+            Toast.makeText(context, "Lỗi khi cập nhật dịch vụ đèn pin", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -198,12 +273,12 @@ class SettingFragment : Fragment() {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 Toast.makeText(context, "Quyền được cấp!", Toast.LENGTH_SHORT).show()
-                if (isFlashOnCallEnabled || isFlashOnSmsEnabled) {
+                if (isFlashOnCallEnabled || isFlashOnSmsEnabled || sharedPreferences.getBoolean("isFlashOn", false)) {
+                    promptMiuiSettings()
                     startFlashService()
                 }
             } else {
-                Toast.makeText(context, "Cần cấp quyền để sử dụng tính năng!", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, "Cần cấp quyền để sử dụng tính năng!", Toast.LENGTH_SHORT).show()
                 view?.findViewById<SwitchCompat>(R.id.switch_flash_on_call)?.isChecked = false
                 view?.findViewById<SwitchCompat>(R.id.switch_flash_on_sms)?.isChecked = false
                 isFlashOnCallEnabled = false

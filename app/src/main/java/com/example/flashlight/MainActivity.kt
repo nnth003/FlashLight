@@ -2,6 +2,8 @@ package com.example.flashlight
 
 import android.content.Context
 import android.os.Bundle
+import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,12 +21,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val prefs = getSharedPreferences("flashlight_prefs", Context.MODE_PRIVATE)
-        val isDarkTheme = prefs.getBoolean("dark_theme", false)
-        AppCompatDelegate.setDefaultNightMode(
-            if (isDarkTheme) AppCompatDelegate.MODE_NIGHT_YES
-            else AppCompatDelegate.MODE_NIGHT_NO
-        )
+//        val prefs = getSharedPreferences("flashlight_prefs", Context.MODE_PRIVATE)
+//        val isDarkTheme = prefs.getBoolean("dark_theme", false)
+//        AppCompatDelegate.setDefaultNightMode(
+//            if (isDarkTheme) AppCompatDelegate.MODE_NIGHT_YES
+//            else AppCompatDelegate.MODE_NIGHT_NO
+//        )
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,7 +36,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
         bottomNavigation()
+        setupBackPressedHandler()
     }
 
     fun bottomNavigation() {
@@ -78,20 +83,31 @@ class MainActivity : AppCompatActivity() {
             insets
         }
     }
-    override fun onBackPressed() {
-        val prefs = getSharedPreferences("flashlight_prefs", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("exit_confirm", true) && navController.previousBackStackEntry == null) {
-            AlertDialog.Builder(this)
-                .setTitle("Thoát ứng dụng")
-                .setMessage("Bạn có chắc muốn thoát không?")
-                .setPositiveButton("Thoát") { _, _ ->
-                    finish()
+    private fun setupBackPressedHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val sharedPreferences = getSharedPreferences("FlashlightPrefs", MODE_PRIVATE)
+                val isExitConfirmationEnabled = sharedPreferences.getBoolean("exitConfirmation", false)
+//                val isFlashOn = viewModel.isFlashOn.value == true
+                if (isExitConfirmationEnabled) {
+                    AlertDialog.Builder(this@MainActivity)
+                        .setTitle("Xác nhận thoát")
+                        .setMessage("Đèn pin đang bật. Bạn có muốn thoát ứng dụng không?")
+                        .setPositiveButton("Thoát") { _, _ ->
+                            isEnabled = false
+                            onBackPressedDispatcher.onBackPressed()
+                        }
+                        .setNegativeButton("Hủy") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setCancelable(false)
+                        .show()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
                 }
-                .setNegativeButton("Hủy", null)
-                .show()
-        } else {
-            super.onBackPressed()
-        }
+            }
+        })
     }
 
     override fun onDestroy() {
