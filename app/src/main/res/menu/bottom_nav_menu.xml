@@ -5,17 +5,18 @@
         android:icon="@drawable/highlight_24"
         android:title="Flash Home" />
 
+<!--    <item-->
+<!--        android:id="@+id/scrollerFlashFragment"-->
+<!--        android:icon="@drawable/scroll_24"-->
+<!--        android:title="Scroller Text" />-->
     <item
-        android:id="@+id/scrollerFlashFragment"
-        android:icon="@drawable/scroll_24"
-        android:title="Scroller Text" />
+        android:id="@+id/flashMorse"
+        android:icon="@drawable/change_24"
+        android:title="Profile" />
 
     <item
-        android:id="@+id/bottom_settings"
-        android:icon="@android:drawable/btn_star"
+        android:id="@+id/flashSetting"
+        android:icon="@drawable/baseline_settings_24"
         android:title="Setting" />
-    <item
-        android:id="@+id/bottom_profile"
-        android:icon="@android:drawable/btn_star"
-        android:title="Profile" />
+
 </menu>

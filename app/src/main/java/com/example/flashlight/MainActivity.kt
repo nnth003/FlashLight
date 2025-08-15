@@ -1,8 +1,11 @@
 package com.example.flashlight
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
@@ -16,6 +19,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val prefs = getSharedPreferences("flashlight_prefs", Context.MODE_PRIVATE)
+        val isDarkTheme = prefs.getBoolean("dark_theme", false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkTheme) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -67,5 +77,24 @@ class MainActivity : AppCompatActivity() {
             // Trả lại insets không bị tiêu thụ
             insets
         }
+    }
+    override fun onBackPressed() {
+        val prefs = getSharedPreferences("flashlight_prefs", Context.MODE_PRIVATE)
+        if (prefs.getBoolean("exit_confirm", true) && navController.previousBackStackEntry == null) {
+            AlertDialog.Builder(this)
+                .setTitle("Thoát ứng dụng")
+                .setMessage("Bạn có chắc muốn thoát không?")
+                .setPositiveButton("Thoát") { _, _ ->
+                    finish()
+                }
+                .setNegativeButton("Hủy", null)
+                .show()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
