@@ -26,6 +26,15 @@ android {
             )
         }
     }
+
+    applicationVariants.all {
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val buildTypeName = name
+            outputImpl.outputFileName = "FlashLightAPK.apk"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
