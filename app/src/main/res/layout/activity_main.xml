@@ -13,7 +13,7 @@
         android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="#CFD76B0F"
+        android:background="@drawable/gradient_background"
         app:title="Flash Light"
         app:titleTextColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
